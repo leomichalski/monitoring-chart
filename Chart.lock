@@ -1,0 +1,16 @@
+dependencies:
+- name: kube-prometheus-stack
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 75.15.0
+- name: loki
+  repository: https://grafana.github.io/helm-charts
+  version: 6.33.0
+- name: promtail
+  repository: https://grafana.github.io/helm-charts
+  version: 6.17.0
+- name: external-secrets
+  repository: https://charts.external-secrets.io
+  version: 0.18.2
+  alias: externalsecrets
+digest: sha256:20e508f43bb3f5d10bb170cd37f773444afae0439c4fb698aae45e9d0dce5e77
+generated: "2025-07-25T22:19:36.716302159-03:00"
