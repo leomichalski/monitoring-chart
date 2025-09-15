@@ -1,0 +1,27 @@
+name: Package and Push Helm Chart
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  helm-chart:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+      name: Clonar o repo
+
+    - name: Package
+      run: |
+        export PACKAGE_FILENAME=$(docker run --rm -v ${PWD}:/current_dir -w /current_dir --user $(id -u):$(id -g) alpine/helm package . | awk '{ print $NF }' | xargs basename)
+        echo "PACKAGE_FILENAME=$PACKAGE_FILENAME" >> $GITHUB_ENV
+
+    - name: Push
+      run: |
+        echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
+        helm push $PACKAGE_FILENAME oci://ghcr.io/${{ github.repository_owner }}
+        # helm install YOUR_RELEASE_NAME oci://ghcr.io/${{ github.repository_owner }}/YOUR_CHART_NAME --version YOUR_VERSION
